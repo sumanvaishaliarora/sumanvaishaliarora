@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💕</title>
+    <link rel="stylesheet" href="web.css">
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-bg" id="hearts-bg"></div>
+
+    <!-- Main Question Widget -->
+    <div class="widget-card" id="question-widget">
+        <span class="heart-icon">💖</span>
+        <h1>A Special Question...</h1>
+        <p class="question">
+            <span class="name">Vaishali (bdisi)</span>,<br>
+            Will you be my Valentine? 💕
+        </p>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="sayYes()">Yes! 💗</button>
+            <button class="btn btn-no" id="no-btn" onmouseover="runAway()" onclick="runAway()">No</button>
+        </div>
+    </div>
+
+    <!-- Celebration Section (Hidden Initially) -->
+    <div class="widget-card celebration" id="celebration">
+        <span class="heart-icon">💖</span>
+        <h1>Yay! 🎉</h1>
+        <p class="love-message">I knew you'd say yes! 💕</p>
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/l0HlN5Y28D9MzzcRy/giphy.gif" alt="Celebration">
+        </div>
+        <p class="love-message" style="margin-top: 20px;">You just made me the happiest person! 🥰</p>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti" id="confetti"></div>
+
+    <script>
+        // Create floating hearts in background
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts-bg');
+            const heartEmojis = ['💕', '💖', '💗', '💓', '💝', '❤️', '💘', '💞'];
+
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.animationDuration = (15 + Math.random() * 10) + 's';
+                heart.style.fontSize = (15 + Math.random() * 25) + 'px';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // Make the "No" button run away from cursor (anywhere in viewport)
+        function runAway() {
+            const btn = document.getElementById('no-btn');
+            const btnWidth = btn.offsetWidth;
+            const btnHeight = btn.offsetHeight;
+
+            // Get viewport dimensions with padding to keep button fully visible
+            const padding = 20;
+            const maxX = window.innerWidth - btnWidth - padding;
+            const maxY = window.innerHeight - btnHeight - padding;
+
+            // Generate random position within viewport
+            let newX = padding + Math.random() * (maxX - padding);
+            let newY = padding + Math.random() * (maxY - padding);
+
+            // Clamp to ensure button stays in viewport
+            newX = Math.max(padding, Math.min(newX, maxX));
+            newY = Math.max(padding, Math.min(newY, maxY));
+
+            // Apply fixed position (relative to viewport)
+            btn.style.position = 'fixed';
+            btn.style.left = newX + 'px';
+            btn.style.top = newY + 'px';
+        }
+
+        // Handle "Yes" button click
+        function sayYes() {
+            // Hide question widget
+            document.getElementById('question-widget').style.display = 'none';
+
+            // Show celebration
+            document.getElementById('celebration').style.display = 'block';
+
+            // Create confetti
+            createConfetti();
+
+            // Play more confetti periodically
+            setInterval(createConfetti, 2000);
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            const colors = ['#ff6b9d', '#ff8a80', '#c51162', '#e91e63', '#f44336', '#4CAF50', '#ffeb3b', '#2196F3', '#9c27b0'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confettiContainer.appendChild(confetti);
+
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Initialize hearts on page load
+        createHearts();
+
+        // Also make No button run away on touch (for mobile)
+        document.getElementById('no-btn').addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            runAway();
+        });
+    </script>
+</body>
+</html>
